@@ -47,6 +47,12 @@
   --font-sans: var(--font-jakarta);
 }
 
+/* Matikan efek tarik/mantul di ujung halaman (iOS Safari 16+, Chrome) supaya terasa seperti aplikasi. */
+html,
+body {
+  overscroll-behavior: none;
+}
+
 body {
   background: var(--bg);
   color: var(--ink);

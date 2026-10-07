@@ -54,7 +54,7 @@ Lupa kata sandi: ubah template **Authentication > Emails > Reset Password** menj
 
 Tanpa perubahan ini tautan bawaan tetap bekerja, tetapi hanya jika dibuka di browser yang sama dengan tempat meminta tautan.
 
-Server email bawaan Supabase hanya mengirim beberapa email per jam. Untuk produksi, pasang SMTP sendiri (misalnya Resend atau Brevo) di **Authentication > Emails > SMTP Settings**.
+Server email bawaan Supabase hanya mengirim beberapa email per jam, dan hanya ke alamat anggota tim project. Untuk produksi, pasang SMTP sendiri (misalnya Resend atau Brevo) di **Authentication > Emails > SMTP Settings**.
 
 ## Pasang di HP (PWA)
 
