@@ -4,7 +4,7 @@ Aplikasi pencatat tabungan (pemasukan dan pengeluaran) dengan maskot PatRot. Dib
 
 ## Fitur
 
-- Daftar dan masuk dengan email + kata sandi (Supabase Auth)
+- Daftar, masuk, dan lupa kata sandi dengan email (Supabase Auth); validasi form lewat kode, tanpa popup bawaan browser
 - Dompet / sumber dana: Tunai, Bank, E-Wallet, dan Lainnya, masing-masing dengan saldo awal
 - Transfer antar dompet (isi saldo e-wallet, tarik tunai) yang tidak dihitung sebagai pemasukan/pengeluaran
 - Total saldo semua dompet ala m-banking, bisa disembunyikan
@@ -45,6 +45,14 @@ Konfirmasi email (**Authentication > Sign In / Providers > Email > Confirm email
   <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email">Konfirmasi email</a>
   ```
 - **Nonaktif**: pengguna langsung masuk setelah mendaftar.
+
+Lupa kata sandi: ubah template **Authentication > Emails > Reset Password** menjadi:
+
+```html
+<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/reset-password">Buat kata sandi baru</a>
+```
+
+Tanpa perubahan ini tautan bawaan tetap bekerja, tetapi hanya jika dibuka di browser yang sama dengan tempat meminta tautan.
 
 Server email bawaan Supabase hanya mengirim beberapa email per jam. Untuk produksi, pasang SMTP sendiri (misalnya Resend atau Brevo) di **Authentication > Emails > SMTP Settings**.
 

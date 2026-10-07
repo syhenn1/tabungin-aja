@@ -3,7 +3,7 @@ import { isAuthRetryableFetchError } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Manifest harus bisa diambil sebelum login (dipakai saat "Tambah ke Layar Utama"); ikon .png sudah dilewati matcher.
-const PUBLIC = ["/login", "/register", "/auth", "/manifest.webmanifest"];
+const PUBLIC = ["/login", "/register", "/lupa-password", "/auth", "/manifest.webmanifest"];
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });

@@ -48,7 +48,7 @@ export function Onboarding({ name, owned, cashBalance }: { name: string; owned: 
               ))}
             </div>
             {step < STEPS - 1 && (
-              <form action={action}>
+              <form action={action} noValidate>
                 <input type="hidden" name="wallets" value="[]" />
                 <button disabled={pending} className="rounded-full px-3 py-1.5 text-sm font-bold text-white/80 hover:bg-white/10">
                   Lewati
@@ -76,6 +76,7 @@ export function Onboarding({ name, owned, cashBalance }: { name: string; owned: 
 
       <form
         action={action}
+        noValidate
         // Enter di kolom saldo tidak boleh langsung menyelesaikan onboarding.
         onKeyDown={(e) => e.key === "Enter" && step < STEPS - 1 && e.preventDefault()}
         className="mx-auto flex w-full max-w-md flex-1 flex-col px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-6"

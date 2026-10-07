@@ -48,7 +48,7 @@ async function Account() {
         <div className="flex items-center gap-3"><UserRound size={18} className="text-sky" /><dt className="sr-only">Nama</dt><dd>{user.name}</dd></div>
         <div className="flex items-center gap-3"><Mail size={18} className="text-sky" /><dt className="sr-only">Email</dt><dd className="truncate">{user.email}</dd></div>
       </dl>
-      <form action={logout} className="mt-5">
+      <form action={logout} noValidate className="mt-5">
         <button className="flex w-full items-center justify-center gap-2 rounded-2xl bg-expense/10 py-3 font-bold text-expense transition-transform active:scale-95">
           <LogOut size={18} /> Keluar
         </button>

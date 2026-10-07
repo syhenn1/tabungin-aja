@@ -167,7 +167,7 @@ function Sheet({ draft, wallets, onClose, onAddWallet, onDone, onError }: {
 
   return (
     <SheetShell title={editing ? "Ubah transaksi" : "Catat transaksi"} onClose={onClose}>
-      <form action={action} className="space-y-5 px-5 pt-3">
+      <form action={action} noValidate className="space-y-5 px-5 pt-3">
         {draft.id && <input type="hidden" name="id" value={draft.id} />}
         <input type="hidden" name="type" value={type} />
         <input type="hidden" name="category" value={category} />
@@ -192,7 +192,6 @@ function Sheet({ draft, wallets, onClose, onAddWallet, onDone, onError }: {
               inputMode="numeric"
               autoComplete="off"
               autoFocus={!editing}
-              required
               placeholder="0"
               value={amount}
               onChange={(e) => setAmount(groupDigits(e.target.value))}
@@ -254,7 +253,7 @@ function Sheet({ draft, wallets, onClose, onAddWallet, onDone, onError }: {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <label className="block">
             <span className="text-sm font-semibold text-muted">Tanggal</span>
-            <input type="date" name="occurred_on" required defaultValue={draft.occurred_on ?? today()} max={today()} className="mt-1 w-full rounded-xl border border-line bg-soft px-3 py-2.5 outline-none focus:border-sky" />
+            <input type="date" name="occurred_on" defaultValue={draft.occurred_on ?? today()} max={today()} className="mt-1 w-full rounded-xl border border-line bg-soft px-3 py-2.5 outline-none focus:border-sky" />
           </label>
           <label className="block">
             <span className="text-sm font-semibold text-muted">Catatan (opsional)</span>

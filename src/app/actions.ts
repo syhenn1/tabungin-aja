@@ -4,15 +4,22 @@ import { refresh } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { requireUser, supabase } from "@/lib/supabase";
-import { CATEGORIES, WALLET_KINDS, type TxType, type WalletKind } from "@/lib/format";
+import { CATEGORIES, today, WALLET_KINDS, type TxType, type WalletKind } from "@/lib/format";
+import { firstError, validateAuth } from "@/lib/validate";
 
 export type FormState = { error?: string; ok?: string } | null;
 
 const str = (f: FormData, k: string) => String(f.get(k) ?? "").trim();
 
+// Kata sandi tidak di-trim: spasi di awal/akhir bisa jadi bagian kata sandi.
+const password = (f: FormData) => String(f.get("password") ?? "");
+const origin = async () => (await headers()).get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL;
+
 export async function login(_: FormState, f: FormData): Promise<FormState> {
+  const invalid = firstError(validateAuth("login", f));
+  if (invalid) return { error: invalid };
   const db = await supabase();
-  const { error } = await db.auth.signInWithPassword({ email: str(f, "email"), password: str(f, "password") });
+  const { error } = await db.auth.signInWithPassword({ email: str(f, "email"), password: password(f) });
   if (error) {
     return { error: error.code === "email_not_confirmed" ? "Email belum dikonfirmasi. Cek inbox kamu." : "Email atau kata sandi salah." };
   }
@@ -20,18 +27,16 @@ export async function login(_: FormState, f: FormData): Promise<FormState> {
 }
 
 export async function register(_: FormState, f: FormData): Promise<FormState> {
+  const invalid = firstError(validateAuth("register", f));
+  if (invalid) return { error: invalid };
   const name = str(f, "name");
   const email = str(f, "email");
-  const password = str(f, "password");
-  if (name.length < 2 || name.length > 50) return { error: "Nama harus 2 sampai 50 karakter." };
-  if (password.length < 8) return { error: "Kata sandi minimal 8 karakter." };
 
-  const origin = (await headers()).get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL;
   const db = await supabase();
   const { data, error } = await db.auth.signUp({
     email,
-    password,
-    options: { data: { full_name: name }, emailRedirectTo: `${origin}/auth/confirm` },
+    password: password(f),
+    options: { data: { full_name: name }, emailRedirectTo: `${await origin()}/auth/confirm` },
   });
   if (error) {
     if (error.code === "user_already_exists") return { error: "Email sudah terdaftar. Silakan masuk." };
@@ -42,6 +47,33 @@ export async function register(_: FormState, f: FormData): Promise<FormState> {
   // Konfirmasi email nonaktif: langsung punya sesi.
   if (data.session) redirect("/");
   return { ok: "Akun dibuat. Cek email kamu untuk konfirmasi, lalu masuk." };
+}
+
+/** Kirim tautan atur ulang kata sandi. Pesan selalu sama supaya tidak membocorkan email mana yang terdaftar. */
+export async function requestPasswordReset(_: FormState, f: FormData): Promise<FormState> {
+  const invalid = firstError(validateAuth("forgot", f));
+  if (invalid) return { error: invalid };
+  const db = await supabase();
+  const { error } = await db.auth.resetPasswordForEmail(str(f, "email"), {
+    redirectTo: `${await origin()}/auth/confirm?next=/reset-password`,
+  });
+  if (error?.code === "over_email_send_rate_limit") return { error: "Terlalu banyak permintaan. Coba lagi beberapa saat lagi." };
+  return { ok: "Kalau email itu terdaftar, tautan untuk membuat kata sandi baru sudah dikirim. Cek inbox dan folder spam." };
+}
+
+/** Simpan kata sandi baru. Sesi didapat dari tautan email (lewat /auth/confirm). */
+export async function updatePassword(_: FormState, f: FormData): Promise<FormState> {
+  const invalid = firstError(validateAuth("reset", f));
+  if (invalid) return { error: invalid };
+  const db = await supabase();
+  const { error } = await db.auth.updateUser({ password: password(f) });
+  if (error) {
+    if (error.code === "same_password") return { error: "Kata sandi baru tidak boleh sama dengan yang lama." };
+    if (error.code === "weak_password") return { error: "Kata sandi terlalu lemah. Gunakan kombinasi huruf dan angka." };
+    if (error.name === "AuthSessionMissingError" || error.code === "session_not_found") return { error: "Tautan sudah kedaluwarsa. Minta tautan baru di halaman Lupa kata sandi." };
+    return { error: "Gagal menyimpan kata sandi. Coba lagi." };
+  }
+  redirect("/");
 }
 
 export async function logout() {
@@ -65,6 +97,7 @@ export async function saveTx(_: FormState, f: FormData): Promise<FormState> {
   if (!Number.isSafeInteger(amount) || amount <= 0 || amount > 1e12) return { error: "Masukkan nominal yang valid." };
   if (!CATEGORIES[type].includes(category)) return { error: "Pilih kategori." };
   if (!/^\d{4}-\d{2}-\d{2}$/.test(occurred_on)) return { error: "Tanggal tidak valid." };
+  if (occurred_on > today()) return { error: "Tanggal tidak boleh di masa depan." };
   if (!wallet_id) return { error: "Pilih dompet." };
   if (to_wallet_id === 0 || to_wallet_id === wallet_id) return { error: "Pilih dompet tujuan yang berbeda." };
 

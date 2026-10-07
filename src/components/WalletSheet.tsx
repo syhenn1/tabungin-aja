@@ -41,7 +41,7 @@ export function WalletSheet({ draft, onClose, onDone, onError }: { draft: Partia
 
   return (
     <SheetShell title={editing ? "Ubah dompet" : "Tambah dompet"} onClose={onClose}>
-      <form action={action} className="space-y-5 px-5 pt-3">
+      <form action={action} noValidate className="space-y-5 px-5 pt-3">
         {draft.id && <input type="hidden" name="id" value={draft.id} />}
         <input type="hidden" name="kind" value={kind} />
         <input type="hidden" name="provider" value={provider} />
