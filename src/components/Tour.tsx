@@ -26,7 +26,7 @@ const STEPS: Step[] = [
   { path: "/laporan", target: "report-tabs", title: "Halaman Laporan", text: "Pilih tampilan harian, bulanan, atau tahunan." },
   { path: "/laporan", target: "report-chart", title: "Grafik dan rincian", text: "Bandingkan pemasukan dan pengeluaran, lengkap dengan jumlah yang ditabung di setiap periode." },
   { path: "/laporan", target: "report-categories", title: "Uangmu ke mana?", text: "Pengeluaran bulan ini per kategori. Di bawahnya ada rincian per dompet. Cocok untuk mencari pos paling boros." },
-  { path: "/profil", target: "profile-help", title: "Profil", text: "Ulangi tur ini dari sini atau dari tombol tanda tanya di Beranda. Tombol Keluar juga ada di halaman ini." },
+  { path: "/profil", target: "profile-help", title: "Profil", text: "Ketuk menu Lihat tutorial lagi kapan saja untuk mengulang tur ini. Tombol Keluar juga ada di halaman ini." },
   { path: "/", target: "patrot", title: "Selesai, kwak!", text: "Ketuk aku kapan saja untuk tips menabung. Selamat mencatat!" },
 ];
 
@@ -166,16 +166,6 @@ function Overlay({ step, setStep }: { step: number; setStep: (s: number | null) 
         </div>
       </motion.div>
     </motion.div>
-  );
-}
-
-/** Tombol "?" untuk mengulang tur. */
-export function TourButton({ className = "" }: { className?: string }) {
-  const { start } = useTour();
-  return (
-    <motion.button whileTap={{ scale: 0.85 }} onClick={start} aria-label="Lihat tutorial" className={className}>
-      <CircleHelp size={22} />
-    </motion.button>
   );
 }
 

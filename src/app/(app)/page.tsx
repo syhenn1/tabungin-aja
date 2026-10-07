@@ -4,7 +4,6 @@ import { ChevronRight } from "lucide-react";
 import { getDashboard } from "@/lib/data";
 import { formatDate, greeting } from "@/lib/format";
 import { PatRot, type Mood } from "@/components/PatRot";
-import { TourButton } from "@/components/Tour";
 import { BalanceCard, EmptyState, PeriodSummary, TxRow, WalletStrip } from "@/components/ui";
 import { CashflowChart, ChartLegend } from "@/components/Charts";
 
@@ -39,12 +38,9 @@ async function Dashboard() {
               <h1 className="truncate text-2xl font-extrabold tracking-tight">{d.user.name}</h1>
             </div>
           </Link>
-          <div className="flex shrink-0 items-start">
-            <TourButton className="rounded-full p-2 text-white/80 hover:bg-white/10" />
-            <span data-tour="patrot">
-              <PatRot mood={mood} size={96} message={message} />
-            </span>
-          </div>
+          <span data-tour="patrot" className="shrink-0">
+            <PatRot mood={mood} size={96} message={message} />
+          </span>
         </div>
       </header>
 

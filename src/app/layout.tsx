@@ -22,7 +22,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="id" className={`${jakarta.variable} h-full antialiased`}>
+    // suppressHydrationWarning: ekstensi browser (mis. Katalon) menambah atribut di <html>; hanya berlaku untuk elemen ini.
+    <html lang="id" className={`${jakarta.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full font-sans">
         <MotionConfig reducedMotion="user">{children}</MotionConfig>
       </body>

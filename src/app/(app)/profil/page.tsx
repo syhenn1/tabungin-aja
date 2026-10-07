@@ -5,6 +5,7 @@ import { logout } from "@/app/actions";
 import { PageHeader } from "@/components/ui";
 import { PatRot } from "@/components/PatRot";
 import { TourMenuItem } from "@/components/Tour";
+import { AppVersion } from "@/components/AppVersion";
 
 export const metadata = { title: "Profil" };
 
@@ -26,6 +27,7 @@ export default function ProfilPage() {
             <p className="text-sm text-muted">Burung beo yang selalu mengingatkanmu untuk mencatat setiap rupiah. Ketuk dia untuk tips menabung.</p>
           </div>
         </section>
+        <AppVersion className="pt-2 text-muted" />
       </div>
     </>
   );

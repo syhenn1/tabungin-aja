@@ -168,7 +168,7 @@ export function Onboarding({ name, owned, cashBalance }: { name: string; owned: 
                   <p className="text-sm font-semibold text-muted">Total saldo {chosen.length} dompet</p>
                   <p className="text-3xl font-extrabold tabular-nums text-income">{formatRp(total)}</p>
                 </div>
-                <p className="text-sm text-muted">Tur singkat akan menunjukkan fungsi setiap halaman. Bisa diulang kapan saja lewat tombol tanda tanya di Beranda.</p>
+                <p className="text-sm text-muted">Tur singkat akan menunjukkan fungsi setiap halaman. Bisa diulang kapan saja lewat menu Profil.</p>
                 {state?.error && <p className="rounded-2xl bg-expense/10 px-4 py-3 text-sm font-semibold text-expense" role="alert">{state.error}</p>}
               </div>
             )}

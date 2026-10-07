@@ -1,8 +1,9 @@
 import { createServerClient } from "@supabase/ssr";
+import { isAuthRetryableFetchError } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 
-// Ikon dan manifest harus bisa diambil sebelum login (dipakai saat "Tambah ke Layar Utama").
-const PUBLIC = ["/login", "/register", "/auth", "/manifest.webmanifest", "/icon", "/apple-icon", "/pwa-icon"];
+// Manifest harus bisa diambil sebelum login (dipakai saat "Tambah ke Layar Utama"); ikon .png sudah dilewati matcher.
+const PUBLIC = ["/login", "/register", "/auth", "/manifest.webmanifest"];
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -24,7 +25,9 @@ export async function proxy(request: NextRequest) {
   );
 
   // Menyegarkan token yang kedaluwarsa. Jangan taruh kode di antara createServerClient dan baris ini.
-  const { data } = await db.auth.getClaims();
+  const { data, error } = await db.auth.getClaims();
+  // Saat jaringan bermasalah jangan mengarahkan ke /login; halaman yang menampilkan pesan error.
+  if (isAuthRetryableFetchError(error)) return response;
   const path = request.nextUrl.pathname;
   const isPublic = PUBLIC.some((p) => path.startsWith(p));
 

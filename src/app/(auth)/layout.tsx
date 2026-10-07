@@ -1,4 +1,5 @@
 import { PatRot } from "@/components/PatRot";
+import { AppVersion } from "@/components/AppVersion";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,7 +9,10 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <h1 className="mt-3 text-4xl font-extrabold tracking-tight md:text-5xl">Tabungin</h1>
         <p className="mt-1 max-w-xs text-white/75">Catat pemasukan dan pengeluaran, lihat tabunganmu tumbuh setiap hari.</p>
       </div>
-      {children}
+      <div className="flex w-full max-w-md flex-col items-center gap-4">
+        {children}
+        <AppVersion className="text-white/60" />
+      </div>
     </div>
   );
 }
