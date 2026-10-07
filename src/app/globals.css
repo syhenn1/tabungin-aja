@@ -1,26 +1,76 @@
 @import "tailwindcss";
 
+/* Palet Tabungin + latar putih */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --navy: #2f39a9;
+  --ocean: #2e6fa0;
+  --sky: #49a4bb;
+  --mint: #15d8b3;
+  --bg: #ffffff;
+  --soft: #f1f6fb; /* isian lembut di dalam kartu (tab, input, bar) */
+  --surface: #ffffff;
+  --ink: #101a44;
+  --muted: #5d6b8f;
+  --line: #e1e8f3;
+  --income: #0a9c80; /* mint digelapkan agar terbaca di atas putih */
+  --expense: #e5486a;
+  --chart-expense: #2f39a9;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg: #0b1232;
+    --soft: #1c2758;
+    --surface: #151f4d;
+    --ink: #eef3ff;
+    --muted: #9aa8cc;
+    --line: #26326a;
+    --income: #15d8b3;
+    --expense: #ff7a93;
+    --chart-expense: #49a4bb;
   }
 }
 
+@theme inline {
+  --color-navy: var(--navy);
+  --color-ocean: var(--ocean);
+  --color-sky: var(--sky);
+  --color-mint: var(--mint);
+  --color-bg: var(--bg);
+  --color-soft: var(--soft);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-income: var(--income);
+  --color-expense: var(--expense);
+  --font-sans: var(--font-jakarta);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Header ala m-banking: solid navy dengan motif lingkaran lembut */
+.hero {
+  background-color: var(--navy);
+  background-image:
+    radial-gradient(circle at 90% -10%, color-mix(in srgb, var(--sky) 55%, transparent) 0 120px, transparent 121px),
+    radial-gradient(circle at 10% 120%, color-mix(in srgb, var(--mint) 35%, transparent) 0 90px, transparent 91px);
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--line) 25%, color-mix(in srgb, var(--line) 40%, var(--surface)) 50%, var(--line) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite linear;
+  border-radius: 0.75rem;
+}
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
